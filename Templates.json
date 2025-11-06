@@ -1,0 +1,51 @@
+[
+    {
+        "category": "minmax",
+        "template": "Care va fi valoarea din radacina pentru un arbore MinMax cu adancimea {D}, factorul de ramificare 2 si valorile din frunze {N}?",
+        "vars":
+        [
+            {
+                "name": "D",
+                "min-val": 2,
+                "max-val": 4
+            },
+            {
+                "name": "N",
+                "min-val": -100,
+                "max-val": 100
+            }
+        ],
+        "explanation": "Algoritmul MinMax propaga aceste valori alternand intre noduri Max si Min pe {D} niveluri, rezultand valoarea finala a radacinii: {root_value}."
+    },
+    {
+        "category": "minmax",
+        "template": "Daca se aplica taieri alfa-beta intr-un arbore MinMax cu adancimea {D}, factorul de ramificare 2, si valorile din frunze {N} care este numarul minim posibil de frunze evaluate?",
+        "vars":
+        [
+            {
+                "name": "D",
+                "min-val": 2,
+                "max-val": 4
+            },
+            {
+                "name": "N",
+                "min-val": -100,
+                "max-val": 100
+            }
+        ],
+        "explanation": "Pentru un arbore MinMax de adancime {D}, taierile alfa-beta elimina ramurile care nu pot influenta decizia finala. Astfel, doar o parte din frunze sunt evaluate, reducand semnificativ numarul total de verificari."
+    },
+    {
+        "category": "minmax",
+        "template": "Daca arborele MinMax are adancimea {D} si fiecare nod are 2 copii, cate noduri frunza exista in total?",
+        "vars":
+        [
+            {
+                "name": "D",
+                "min-val": 2,
+                "max-val": 6
+            }
+        ],
+        "explanation": "Un arbore binar complet de adancime {D} are 2^{D} noduri frunza."
+    }
+]
