@@ -1,29 +1,23 @@
-﻿import MinMax
-from CheckAnswer import CheckAnswer
-from MinMaxQuestion import MinimaxQuestion
+﻿from AnswerCheckers.NashAnswerChecker import NashAnswerChecker
+from Questions.NashQuestion import NashQuestion
 
 def main():
 
     num_questions = int(input("Câte întrebări vrei să generezi? "))
 
-    minimax = MinimaxQuestion()
+    nash = NashQuestion()
 
     for i in range(num_questions):
         print(f"\nIntrebarea {i + 1}:")
-        question_text, answer, tree, explanation = minimax.generate()
+        question_text, answer, matrix, player1_strategies, player2_strategies, explanation = nash.generate()
         print(question_text)
 
         user_answer = input("Raspunsul tău: ")
-        print(user_answer)
+        nash_checker = NashAnswerChecker()
 
-        feedback = CheckAnswer.get_minmax_feedback(answer, user_answer, tree, explanation)
-
-        if feedback["points"] != 100:
-            if tree is not None:
-                MinMax.print_final_tree(tree)
-            print(feedback["message"] + " Raspuns corect: " + str(feedback["correct_answer"]) + ". Scor:" + str(feedback["points"]) + "/100")
-            continue
-
-        print(feedback["message"] + "Scor:" + str(feedback["points"]) + "/100")
+        feedback = nash_checker.get_nash_feedback(answer, user_answer, explanation)
+        print(feedback["message"])
+        print(feedback["points"])
+        print(feedback["correct_answer"])
 
 main()

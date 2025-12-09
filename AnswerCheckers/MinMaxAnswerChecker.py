@@ -1,6 +1,6 @@
-﻿from MinMax import get_final_tree_values
+﻿from Algorithms.MinMax import get_final_tree_values
 
-class CheckAnswer:
+class MinMaxAnswerChecker:
     def __init__(self):
         pass
 
@@ -25,7 +25,7 @@ class CheckAnswer:
 
         # este pentru adancimea minima
         if tree is None:
-            if CheckAnswer._is_power_of_two(answer):
+            if MinMaxAnswerChecker._is_power_of_two(answer):
                 feedback["message"] = "Raspuns partial corect!"
                 partial_points = 50
             else:

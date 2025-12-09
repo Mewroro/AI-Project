@@ -1,9 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 
-from MinMax import Node
-from CheckAnswer import CheckAnswer
-from MinMaxQuestion import MinimaxQuestion
+from AnswerCheckers.MinMaxAnswerChecker import MinMaxAnswerChecker
+from Questions.MinMaxQuestion import MinimaxQuestion
 
 
 class AIExamApp(tk.Tk):
@@ -163,7 +162,7 @@ class AIExamApp(tk.Tk):
         user_answer = self.answer_text.get("1.0", "end").strip()
         q = self.questions[self.current_index]
 
-        feedback = CheckAnswer.get_minmax_feedback(
+        feedback = MinMaxAnswerChecker.get_minmax_feedback(
             self.answers[q], user_answer, self.trees[q], self.explanations[q]
         )
 

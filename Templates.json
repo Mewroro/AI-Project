@@ -47,5 +47,90 @@
             }
         ],
         "explanation": "Un arbore binar complet de adancime {D} are 2^{D} noduri frunza."
+    },
+    {
+        "id": 1,
+        "category": "nash",
+        "template": "Pentru jocul dat in forma normala, cate echilibre Nash pure se pot regasi? {X}",
+        "vars":
+        [
+            {
+                "name": "X",
+                "is_mixt": false,
+                "min-strategies-count": 2,
+                "max-strategies-count": 4,
+                "min-payoff": 0,
+                "max-payoff": 10
+            }
+        ],
+        "explanation": "Determinam echilibrele Nash pure prin gasirea pozitiilor in matrice unde ambii jucatori au ales cele mai bune răspunsuri simultan"
+    },
+    {
+        "id": 2,
+        "category": "nash",
+        "template": "Pentru jocul dat in forma normala, scrie care sunt echilibrele Nash pure sub forma (Strategie1, Strategie2), iar 0 daca nu exista niciun astfel de echilibru. {X}",
+        "vars":
+        [
+            {
+                "name": "X",
+                "is_mixt": false,
+                "min-strategies-count": 2,
+                "max-strategies-count": 4,
+                "min-payoff": 0,
+                "max-payoff": 10
+            }
+        ],
+        "explanation": "Determinam echilibrele Nash pure prin gasirea pozitiilor in matrice unde ambii jucatori au ales cele mai bune raspunsuri simultan, apoi luam denumirile strategiilor specifice acelor pozitii"
+    },
+    {
+        "id": 3,
+        "category": "nash",
+        "template": "Exista pentru jocul dat in forma normala un echilibru Nash pur? (0 = NU, 1 = DA) {X}",
+        "vars":
+        [
+            {
+                "name": "X",
+                "is_mixt": true,
+                "min-strategies-count": 2,
+                "max-strategies-count": 4,
+                "min-payoff": 0,
+                "max-payoff": 10
+            }
+        ],
+        "explanation": "Avem un echilibru Nash pur doar daca exista cel putin o strategie pereche in care fiecare jucator isi maximizeaza castigul ca raspuns la strategia celuilalt. In cazul acesta, nu exista niciun astfel de pereche"
+    },
+    {
+        "id": 4,
+        "category": "nash",
+        "template": "Pentru jocul dat in forma normala, scrie care sunt strategiile dominante pentru jucatorul 1, iar 0 daca nu exista niciun astfel de strategie. {X}",
+        "vars":
+        [
+            {
+                "name": "X",
+                "is_mixt": false,
+                "min-strategies-count": 2,
+                "max-strategies-count": 4,
+                "min-payoff": 0,
+                "max-payoff": 10
+            }
+        ],
+        "explanation": "Strategiile dominante sunt cele care ofera jucatorului 1 cel mai mare castig indiferent de alegerea adversarului."
+    },
+   {
+        "id": 5,
+        "category": "nash",
+        "template": "Pentru jocul dat in forma normala, scrie care sunt strategiile dominante pentru jucatorul 2, iar 0 daca nu exista niciun astfel de strategie. {X}",
+        "vars":
+        [
+            {
+                "name": "X",
+                "is_mixt": false,
+                "min-strategies-count": 2,
+                "max-strategies-count": 4,
+                "min-payoff": 0,
+                "max-payoff": 10
+            }
+        ],
+        "explanation": "Strategiile dominante sunt cele care ofera jucatorului 2 cel mai mare castig indiferent de alegerea adversarului."
     }
 ]

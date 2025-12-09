@@ -1,6 +1,6 @@
 import random
 
-from MinMax import minimax, build_tree
+from Algorithms.MinMax import minimax, build_tree
 from QuestionBase import QuestionBase
 
 class MinimaxQuestion(QuestionBase):
