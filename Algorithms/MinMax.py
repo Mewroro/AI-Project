@@ -1,122 +1,97 @@
 import random
-from collections import deque
 
-# === Clasa Nodului din arbore ===
 class Node:
-    def __init__(self, value=None, left=None, right=None):
+    def __init__(self, value=None):
         self.value = value
-        self.left = left
-        self.right = right
+        self.children = []
 
-# === Construiește arbore binar complet dintr-o listă de frunze ===
-def build_tree(leaves):
-    nodes = [Node(value=v) for v in leaves]
-    while len(nodes) > 1:
-        new_level = []
-        for i in range(0, len(nodes), 2):
-            left = nodes[i]
-            right = nodes[i+1]
-            new_level.append(Node(None, left, right))
-        nodes = new_level
-    return nodes[0]  # rădăcina
+class MinMax:
+    def __init__(self, depth, leaf_values):
+        self.depth = depth
 
-# === Afișare arbore pe nivele ===
-def print_tree(root, title="Structura arborelui"):
-    if not root:
-        print("(Arbore gol)")
-        return
+        self.leaf_values = leaf_values
+        self.leaf_count = len(leaf_values)
 
-    queue = deque([(root, 0)])
-    current_level = 0
-    level_nodes = []
+        self.evaluated_leaves = 0
+        self.root_value = None
 
-    print(f"\n{title}:")
-    while queue:
-        node, level = queue.popleft()
+        self.tree = self.build_random_tree()
 
-        if level != current_level:
-            print(f"Nivel {current_level}: {level_nodes}")
-            level_nodes = []
-            current_level = level
+    def build_random_tree(self):
+        leaves = [Node(value=v) for v in self.leaf_values]
+        if self.depth == 0:
+            return leaves[0]
 
-        level_nodes.append(node.value if node.value is not None else "None")
+        current_level = leaves
+        for _ in range(self.depth):
+            next_level = []
+            i = 0
 
-        if node.left:
-            queue.append((node.left, level + 1))
-        if node.right:
-            queue.append((node.right, level + 1))
+            while i < len(current_level):
+                child_count = random.randint(1, min(4, len(current_level) - i))
+                children = current_level[i:i + child_count]
 
-    print(f"Nivel {current_level}: {level_nodes}")
+                parent = Node()
+                parent.children = children
+                next_level.append(parent)
 
-def get_final_tree_values(root):
-    if not root:
-        return
+                i += child_count
 
-    queue = deque([(root, 0)])
-    current_level = 0
-    level_nodes = []
+            if not next_level:
+                break
 
-    while queue:
-        node, level = queue.popleft()
+            current_level = next_level
 
-        if level != current_level:
-            level_nodes = []
-            current_level = level
+            if len(current_level) == 1:
+                break
 
-        level_nodes.append(node.value if node.value is not None else "None")
+        if current_level:
+            return current_level[0]
+        else:
+            return Node()
 
-        if node.left:
-            queue.append((node.left, level + 1))
-        if node.right:
-            queue.append((node.right, level + 1))
+    def minimax(self, node, alpha, beta, maximizing):
+        if len(node.children) == 0:
+            self.evaluated_leaves += 1
+            return node.value
 
-    return level_nodes
+        if maximizing:
+            best = float("-inf")
+            for child in node.children:
+                val = self.minimax(child, alpha, beta, False)
+                best = max(best, val)
+                alpha = max(alpha, best)
+                if beta <= alpha:
+                    break
+            node.value = best
+            return best
+        else:
+            best = float("inf")
+            for child in node.children:
+                val = self.minimax(child, alpha, beta, True)
+                best = min(best, val)
+                beta = min(beta, best)
+                if beta <= alpha:
+                    break
+            node.value = best
+            return best
 
-# === Funcția Minimax cu Alpha-Beta și completarea valorilor pentru noduri tăiate ===
-def minimax(node, depth, alpha, beta, maximizing_player, counter):
-    # Caz frunză
-    if node.left is None and node.right is None:
-        counter[0] += 1
-        return node.value
+    def get_depth_of_value(self, value):
+        return self.dfs_depth(self.tree, value, 0)
 
-    if maximizing_player:
-        max_eval = float('-inf')
-        # stânga
-        val_left = minimax(node.left, depth+1, alpha, beta, False, counter)
-        max_eval = max(max_eval, val_left)
-        alpha = max(alpha, max_eval)
+    def dfs_depth(self, node, value, depth):
+        if node is None:
+            return -1
+        if node.value == value:
+            return depth
+        for child in node.children:
+            result = self.dfs_depth(child, value, depth + 1)
+            if result != -1:
+                return result
+        return -1
 
-        # dreapta
-        if node.right:
-            if beta > alpha:
-                val_right = minimax(node.right, depth+1, alpha, beta, False, counter)
-                max_eval = max(max_eval, val_right)
-            else:
-                # Ramura tăiată → setăm valoarea copilului drept = valoarea curentă a nodului
-                node.right.value = max_eval
 
-        node.value = max_eval
-        return max_eval
-    else:
-        min_eval = float('inf')
-        # stânga
-        val_left = minimax(node.left, depth+1, alpha, beta, True, counter)
-        min_eval = min(min_eval, val_left)
-        beta = min(beta, min_eval)
-
-        # dreapta
-        if node.right:
-            if beta > alpha:
-                val_right = minimax(node.right, depth+1, alpha, beta, True, counter)
-                min_eval = min(min_eval, val_right)
-            else:
-                # Ramura tăiată → setăm valoarea copilului drept = valoarea curentă a nodului
-                node.right.value = min_eval
-
-        node.value = min_eval
-        return min_eval
-
-# === Funcție pentru afișarea arborelui final ===
-def print_final_tree(root):
-    print_tree(root, title="Arborele final după aplicarea strategiei Minimax")
-
+    def run_minmax(self):
+        self.evaluated_leaves = 0
+        self.root_value = self.minimax(self.tree, float("-inf"), float("inf"), True)
+        return self.root_value

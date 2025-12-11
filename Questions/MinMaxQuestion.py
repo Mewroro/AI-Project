@@ -1,64 +1,57 @@
 import random
+from Algorithms.MinMax import MinMax
+from Questions.QuestionBase import QuestionBase
 
-from Algorithms.MinMax import minimax, build_tree
-from QuestionBase import QuestionBase
 
-class MinimaxQuestion(QuestionBase):
+class MinMaxQuestion(QuestionBase):
     def __init__(self):
         super().__init__("minmax")
+    def get_answer(self, id, minmax):
+        minmax.run_minmax()
+        if id == 1:
+            return minmax.root_value
 
-    def get_answer(self, template, values):
-        tree = None
-        counter = [0]
+        if id == 2:
+            return minmax.evaluated_leaves
 
-        if "radacina" in template:
-            leaves = values["N"]
-            tree = build_tree(leaves)
-            answer = minimax(tree, 0, float('-inf'), float('inf'), True, counter)
-        elif "alfa-beta" in template:
-            leaves = values["N"]
-            tree = build_tree(leaves)
-            minimax(tree, 0, float('-inf'), float('inf'), True, counter)
-            answer = counter[0]
-        elif "cate noduri frunza" in template:
-            answer = 2 ** values["D"]
-
-        return answer, tree
+        return None
 
     def generate(self):
         question = self.get_random_template()
+        question_id = question["id"]
         template = question["template"]
         variables = question["vars"]
-        explanation_template = question["explanation"]
+        explanation = question["explanation"]
 
         values = {}
+        depth_value = None
         for var in variables:
-            name = var["name"]
-            min_val = var["min-val"]
-            max_val = var["max-val"]
+            if var["name"] == "D":
+                depth_value = random.randint(var["min-val"], var["max-val"])
+                values["D"] = depth_value
+                break
 
-            if "N" == name:
-                depth = values["D"]
-                leaves_count = 2 ** depth
-                value = [random.randint(min_val, max_val) for _ in range(leaves_count)]
-            else:
-                value = random.randint(min_val, max_val)
+        for var in variables:
+            if var["name"] != "N":
+                continue
 
-            values[name] = value
+            leaves_min = var["min-val"]
+            leaves_max = var["max-val"]
+
+            count = random.randint(depth_value, depth_value**2)
+            leaves = [random.randint(leaves_min, leaves_max) for _ in range(count)]
+            values["N"] = leaves
+
+        minmax = MinMax(depth_value, values["N"])
+        answer = self.get_answer(question_id, minmax)
 
         question_text = template
         for k, v in values.items():
-            question_text = question_text.replace("{" + k + "}", str(v))
+            if k == "N":
+                string_list = ", ".join(str(x) for x in v)
+                question_text = question_text.replace("{" + k + "}", string_list)
+            elif k == "D":
+                question_text = question_text.replace("{" + k + "}", str(v))
+                explanation = explanation.replace("{" + k + "}", str(v))
 
-        answer, tree = self.get_answer(template, values)
-
-        explanation = explanation_template
-        for k, v in values.items():
-            explanation = explanation.replace("{" + k + "}", str(v))
-
-        if "{root_value}" in explanation:
-            explanation = explanation.replace("{root_value}", str(answer))
-
-        return question_text, answer, tree, explanation
-
-
+        return question_text, answer, minmax, question_id, explanation

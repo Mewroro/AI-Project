@@ -1,53 +1,53 @@
-﻿from Algorithms.MinMax import get_final_tree_values
+﻿class MinMaxAnswerChecker:
+    ALPHA_BETA_PARTIAL_RESPONSE_THRESHOLD = 1
+    DEPTH_PARTIAL_RESPONSE_THRESHOLD = 2
 
-class MinMaxAnswerChecker:
     def __init__(self):
         pass
-
-    @staticmethod
-    def _is_power_of_two(n):
-        if not isinstance(n, int) or n <= 0:
-            return False
-        return (n & (n - 1)) == 0
-    @staticmethod
-    def get_minmax_feedback(answer, user_answer, tree, explanation):
+    def get_minmax_feedback(self, answer, user_answer, explanation, question_id, minmax):
         feedback = {}
-        full_points = 100
-        partial_points = 0
+        points = 0
 
-        user_answer = user_answer.split()
+        if question_id == 1:
+            points = self.check_root_value(answer, user_answer, minmax)
 
-        for word in user_answer:
-            if str(word) == str(answer):
-                feedback["message"] = "Raspuns corect!"
-                feedback["points"] = full_points
-                return feedback
+        elif question_id == 2:
+            points = self.check_alpha_beta(answer, user_answer)
 
-        # este pentru adancimea minima
-        if tree is None:
-            if MinMaxAnswerChecker._is_power_of_two(answer):
-                feedback["message"] = "Raspuns partial corect!"
-                partial_points = 50
-            else:
-                feedback["message"] = "Raspuns gresit!"
-
-            feedback["points"] = partial_points
-            feedback["correct_answer"] = answer
-            return feedback
-
-
-        final_values = get_final_tree_values(tree)
-
-        final_values_numeric = [v for v in final_values if v != "None"]
-
-        if user_answer in final_values_numeric:
-            feedback["message"] = "Raspuns partial corect! "
-            partial_points = 0.5
+        if points == 100:
+            feedback["message"] = "Răspuns corect!"
+        elif points == 50:
+            feedback["message"] = "Răspuns parțial corect! " + explanation
         else:
-            feedback["message"] = "Raspuns gresit. "
+            feedback["message"] = "Răspuns greșit. " + explanation
 
-        feedback["message"] += explanation
-        feedback["points"] = partial_points
+        feedback["points"] = points
         feedback["correct_answer"] = answer
 
         return feedback
+
+    def check_root_value(self, answer, user_answer, minmax):
+        try:
+            user_value = int(user_answer)
+        except:
+            return 0
+
+        if user_value == answer:
+            return 100
+        elif minmax.get_depth_of_value(user_value) <= self.DEPTH_PARTIAL_RESPONSE_THRESHOLD:
+            return 50
+        return 0
+
+    def check_alpha_beta(self, answer, user_answer):
+        try:
+            user_value = int(user_answer)
+        except:
+            return 0
+
+        if user_value == answer:
+            return 100
+
+        if abs(user_value - answer) <= self.ALPHA_BETA_PARTIAL_RESPONSE_THRESHOLD:
+            return 50
+
+        return 0
