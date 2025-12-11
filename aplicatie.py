@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 
 from AnswerCheckers.MinMaxAnswerChecker import MinMaxAnswerChecker
-from Questions.MinMaxQuestion import MinimaxQuestion
+from Questions.MinMaxQuestion import MinMaxQuestion
 
 
 class AIExamApp(tk.Tk):
@@ -65,7 +65,7 @@ class AIExamApp(tk.Tk):
             messagebox.showwarning("Atenție", "Selectează capitolul MinMax!")
             return
 
-        minimax = MinimaxQuestion()
+        minimax = MinMaxQuestion()
         self.questions, self.answers, self.trees, self.explanations = [], {}, {}, {}
 
         for i in range(num):

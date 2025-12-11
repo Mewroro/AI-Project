@@ -1,12 +1,15 @@
-﻿from AnswerCheckers.NashAnswerChecker import NashAnswerChecker
+﻿from AnswerCheckers.MinMaxAnswerChecker import MinMaxAnswerChecker
+from AnswerCheckers.NashAnswerChecker import NashAnswerChecker
+from Questions.MinMaxQuestion import MinMaxQuestion
 from Questions.NashQuestion import NashQuestion
 from UserQueries.NashUserQuery import NashUserQuery
 
 def main():
 
     print("Alege modul:")
-    print("1 - Generează întrebări random (sistemul tău standard)")
-    print("2 - Lasă userul să pună întrebări despre algoritmul Nash")
+    print("1 - Generează întrebări Nash (sistemul tău standard)")
+    print("2 - Generează întrebări MinMax (sistemul tău standard)")
+    print("3 - Lasă userul să pună întrebări despre algoritmul Nash")
     mode = input("Mod: ").strip()
 
     if mode == "1":
@@ -28,16 +31,35 @@ def main():
             print("Răspuns corect:", feedback["correct_answer"])
 
         return
-
     elif mode == "2":
+        num_questions = int(input("Câte întrebări vrei să generezi? "))
+
+        minmax_question = MinMaxQuestion()
+
+        for i in range(num_questions):
+            print(f"\nIntrebarea {i + 1}:")
+            # ca sa iei tree-ul fa minmax.tree
+            question_text, answer, minmax, question_id, explanation = minmax_question.generate()
+            print(question_text)
+
+            user_answer = input("Raspunsul tău: ")
+            minmax_checker = MinMaxAnswerChecker()
+
+            feedback = minmax_checker.get_minmax_feedback(answer, user_answer, explanation, question_id, minmax)
+            print(feedback["message"])
+            print("Puncte:", feedback["points"])
+            print("Răspuns corect:", feedback["correct_answer"])
+
+        return
+
+    elif mode == "3":
         print("\nScrie întrebarea ta despre algoritmul Nash.")
         print("Exemple:")
         print("  aleatoriu, cate echilibre Nash pure?")
-        print("  [[(1,1) (2,2)] [(3,3) (2,1)]], [A1, B1], [A2, B2], care sunt echilibrele Nash pure?")
+        print("  [[(1,1) (2,2)] [(3,3) (2,1)]]; [A1, B1]; [A2, B2]; care sunt echilibrele Nash pure?")
         print("Scrie 'exit' pentru a ieși.")
 
         query = NashUserQuery()
-        checker = NashAnswerChecker()
 
         while True:
             msg = input("\nÎntrebarea ta: ")
