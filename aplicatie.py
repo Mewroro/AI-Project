@@ -14,7 +14,9 @@ class AIExamApp(tk.Tk):
 
         self.questions = []
         self.answers = {}
+        self.minmax = None
         self.trees = {}
+        self.question_ids ={}
         self.explanations = {}
         self.current_index = 0
 
@@ -69,15 +71,17 @@ class AIExamApp(tk.Tk):
         self.questions, self.answers, self.trees, self.explanations = [], {}, {}, {}
 
         for i in range(num):
-            q_text, answer, tree, explanation = minimax.generate()
+            q_text, answer, minmax, question_id, explanation = minimax.generate()
             self.questions.append(q_text)
             self.answers[q_text] = answer
-            self.trees[q_text] = tree
+            self.minmax = minmax
+            self.trees[q_text] = minmax.tree
+            self.question_ids[q_text] = question_id
             self.explanations[q_text] = explanation
 
         self.current_index = 0
-        self.show_questions_page()
 
+        self.show_questions_page()
     # Pagina de întrebări
     def show_questions_page(self):
         for widget in self.winfo_children():
@@ -162,8 +166,9 @@ class AIExamApp(tk.Tk):
         user_answer = self.answer_text.get("1.0", "end").strip()
         q = self.questions[self.current_index]
 
-        feedback = MinMaxAnswerChecker.get_minmax_feedback(
-            self.answers[q], user_answer, self.trees[q], self.explanations[q]
+        checker = MinMaxAnswerChecker()
+        feedback = checker.get_minmax_feedback(
+            self.answers[q], user_answer, self.explanations[q], self.question_ids[q], self.minmax
         )
 
         points = feedback.get("points", 0)
