@@ -50,6 +50,37 @@ class MinMax:
         else:
             return Node()
 
+    def build_tree_from_structure(self, leaf_values, structure):
+        if not structure:
+            return Node(leaf_values[0]) if leaf_values else Node()
+
+        queue = []
+        root = Node()
+        queue.append((root, structure[0]))
+        structure_index = 1
+        leaf_index = 0
+
+        while queue:
+            parent, num_children = queue.pop(0)
+            children = []
+
+            for _ in range(num_children):
+                if structure_index < len(structure):
+                    child = Node()
+                    children.append(child)
+                    queue.append((child, structure[structure_index]))
+                    structure_index += 1
+                elif leaf_index < len(leaf_values):
+                    child = Node(leaf_values[leaf_index])
+                    children.append(child)
+                    leaf_index += 1
+                else:
+                    children.append(Node())
+
+            parent.children = children
+
+        return root
+
     def minimax(self, node, alpha, beta, maximizing):
         if len(node.children) == 0:
             self.evaluated_leaves += 1

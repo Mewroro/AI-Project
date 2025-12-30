@@ -94,7 +94,7 @@ class NashUserQuery:
         if "cat" in question and "echilib" in question:
             return "count"
 
-        if "care sunt echilibre" in question:
+        if "care" in question and "echilibre" in question:
             return "list"
 
         if "strategiile dominante" in question and "1" in question:

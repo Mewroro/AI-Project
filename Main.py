@@ -1,15 +1,20 @@
-﻿from AnswerCheckers.MinMaxAnswerChecker import MinMaxAnswerChecker
+﻿from AnswerCheckers.CSPAnswerChecker import CSPAnswerChecker
+from AnswerCheckers.MinMaxAnswerChecker import MinMaxAnswerChecker
 from AnswerCheckers.NashAnswerChecker import NashAnswerChecker
+from Questions.CSPQuestion import CSPQuestion
 from Questions.MinMaxQuestion import MinMaxQuestion
 from Questions.NashQuestion import NashQuestion
+from UserQueries.MinMaxUserQuery import MinMaxUserQuery
 from UserQueries.NashUserQuery import NashUserQuery
 
 def main():
 
     print("Alege modul:")
-    print("1 - Generează întrebări Nash (sistemul tău standard)")
-    print("2 - Generează întrebări MinMax (sistemul tău standard)")
-    print("3 - Lasă userul să pună întrebări despre algoritmul Nash")
+    print("1 - Genereaza intrebari Nash")
+    print("2 - Genereaza întrebari MinMax")
+    print("3 - Lasa userul sa puna intrebari despre algoritmul Nash")
+    print("4 - Genereaza întrebari CSP")
+    print("5 - Lasa userul sa puna intrebari despre algoritmul MinMax")
     mode = input("Mod: ").strip()
 
     if mode == "1":
@@ -84,6 +89,55 @@ def main():
 
         return
 
+    elif mode == "4":
+        num_questions = int(input("Cate întrebari CSP vrei sa generezi? "))
+
+        csp_question = CSPQuestion()
+        csp_checker = CSPAnswerChecker()
+
+        for i in range(num_questions):
+            print(f"\nIntrebarea CSP {i + 1}:")
+            question_text, answer, explanation = csp_question.generate()
+
+            print(question_text)
+
+            user_answer = input("\nRaspunsul tau (ex: X=1 Y=2 sau 'nu exista solutie'): ")
+
+            feedback = csp_checker.get_csp_feedback(answer, user_answer, explanation)
+
+            print(feedback["message"])
+            print("Puncte:", feedback["points"])
+            print("Raspuns corect:", feedback["correct_answer"])
+
+        return
+    elif mode == "5":
+        print("\nScrie intrebarea ta despre algoritmul MinMax.")
+        print("Exemple:")
+        print("  aleatoriu")
+        print("  3; 3,1,5,2; 2,2,2; Care va fi valoarea radacinii?")
+        print("Scrie 'exit' pentru a iesi.")
+
+        query = MinMaxUserQuery()
+
+        while True:
+            msg = input("\nintrebarea ta: ")
+
+            if msg.lower().strip() == "exit":
+                break
+
+            result = query.process(msg)
+
+            if isinstance(result, str):
+                print("Eroare:", result)
+                continue
+
+            print("\nDetalii arbore MinMax:")
+            print("Adancime:", result["depth"])
+            print("Valori frunze:", result["leaf_values"])
+            if "structure" in result:
+                print("Structura arborelui:", result["structure"])
+            print("Intrebare:", result["question"])
+            print(result["answer"])
     else:
         print("Mod invalid!")
 

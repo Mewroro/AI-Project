@@ -121,5 +121,53 @@
             }
         ],
         "explanation": "Strategiile dominante sunt cele care ofera jucatorului 2 cel mai mare castig indiferent de alegerea adversarului."
+    },
+    {
+        "id": 1,
+        "category": "csp",
+        "template": "Care va fi asignarea finala a variabilelor ramase daca aplicam algoritmul Backtracking cu optimizarea Forward Checking (FC)?\n{X}",
+        "vars": [
+            {
+                "name": "X",
+                "min-vars": 3,
+                "max-vars": 4,
+                "min-domain": 2,
+                "max-domain": 5,
+                "constraints-type": "binary"
+            }
+        ],
+        "explanation": "Forward Checking elimina valorile incompatibile din domeniile variabilelor neasignate imediat dupa fiecare asignare."
+    },
+    {
+        "id": 2,
+        "category": "csp",
+        "template": "Care va fi asignarea finala a variabilelor ramase daca aplicam algoritmul Backtracking cu optimizarea MRV?\n{X}",
+        "vars": [
+            {
+                "name": "X",
+                "min-vars": 3,
+                "max-vars": 4,
+                "min-domain": 2,
+                "max-domain": 5,
+                "constraints-type": "binary"
+            }
+        ],
+        "explanation": "Euristica MRV alege variabila cu cel mai mic numar de valori ramase in domeniu."
+    },
+    {
+        "id": 3,
+        "category": "csp",
+        "template": "Care va fi asignarea finala a variabilelor ramase daca aplicam algoritmul Backtracking cu optimizarea AC-3?\n{X}",
+        "vars": [
+            {
+                "name": "X",
+                "min-vars": 3,
+                "max-vars": 4,
+                "min-domain": 2,
+                "max-domain": 5,
+                "constraints-type": "binary"
+            }
+        ],
+        "explanation": "AC-3 impune consistenta de arc, eliminand valorile care nu au suport in domeniile vecinilor."
     }
 ]
