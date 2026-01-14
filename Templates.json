@@ -169,5 +169,76 @@
             }
         ],
         "explanation": "AC-3 impune consistenta de arc, eliminand valorile care nu au suport in domeniile vecinilor."
+    },
+    {
+        "id": 1,
+        "category": "search",
+        "template": "Pentru problema N-Queens cu n={N} (tabla este {N}x{N}), care este cea mai potrivita strategie de rezolvare?",
+        "vars":
+        [
+            {
+                "name": "N",
+                "min-val": 4,
+                "max-val": 8
+            }
+        ],
+        "explanation": "N-Queens este o problema de satisfacere a constrangerilor (CSP), unde fiecare rand trebuie sa aiba o regina fara conflicte pe coloane sau diagonale. Cele mai eficiente strategii sunt 'backtracking' sau 'hillclimbing'."
+    },
+    {
+        "id": 2,
+        "category": "search",
+        "template": "Pentru problema generalised Hanoi cu {N} discuri si {P} tije, care este cea mai potrivita strategie de rezolvare?",
+        "vars":
+        [
+            {
+                "name": "N",
+                "min-val": 3,
+                "max-val": 7
+            },
+            {
+                "name": "P",
+                "min-val": 3,
+                "max-val": 4
+            }
+        ],
+        "explanation": "Generalised Hanoi este o problema de cautare in spatiul starilor, unde miscarea discului trebuie sa respecte reguli stricte. Cele mai eficiente strategii sunt 'bfs' sau 'a*', pentru a gasi solutia optima."
+    },
+    {
+        "id": 3,
+        "category": "search",
+        "template": "Pentru problema Graph Coloring cu un graf de {V} varfuri, {E} muchii si {K} culori disponibile, lista de adiacenta este:\n{GRAPH}\nCare este cea mai potrivita strategie de rezolvare?",
+        "vars":
+        [
+            {
+                "name": "V",
+                "min-val": 3,
+                "max-val": 6
+            },
+            {
+                "name": "E",
+                "min-val": 2,
+                "max-val": 10
+            },
+            {
+                "name": "K",
+                "min-val": 2,
+                "max-val": 5
+            }
+        ],
+        "explanation": "Graph Coloring este o problema CSP in care trebuie atribuite culori varfurilor astfel incat vecinii sa nu aiba aceeasi culoare. Cele mai eficiente strategii sunt 'backtracking' sau 'hillclimbing'."
+    },
+    {
+        "id": 4,
+        "category": "search",
+        "template": "Pentru problema Knight's Tour pe o tabla de dimensiune {N}x{N} - (knight-ul incepe din (0,0)), care este cea mai potrivita strategie de rezolvare?",
+        "vars":
+        [
+            {
+                "name": "N",
+                "min-val": 5,
+                "max-val": 8
+            }
+        ],
+        "explanation": "Knight's Tour este o problema de gasire a unui drum Hamiltonian pe tabla de sah. Cele mai eficiente strategii sunt 'backtracking' sau 'heuristic/greedy'."
     }
 ]

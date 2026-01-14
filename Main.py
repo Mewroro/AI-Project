@@ -1,9 +1,11 @@
 ﻿from AnswerCheckers.CSPAnswerChecker import CSPAnswerChecker
 from AnswerCheckers.MinMaxAnswerChecker import MinMaxAnswerChecker
 from AnswerCheckers.NashAnswerChecker import NashAnswerChecker
+from AnswerCheckers.SearchAnswerChecker import SearchAnswerChecker
 from Questions.CSPQuestion import CSPQuestion
 from Questions.MinMaxQuestion import MinMaxQuestion
 from Questions.NashQuestion import NashQuestion
+from Questions.SearchQuestion import SearchQuestion
 from UserQueries.MinMaxUserQuery import MinMaxUserQuery
 from UserQueries.NashUserQuery import NashUserQuery
 
@@ -15,6 +17,7 @@ def main():
     print("3 - Lasa userul sa puna intrebari despre algoritmul Nash")
     print("4 - Genereaza întrebari CSP")
     print("5 - Lasa userul sa puna intrebari despre algoritmul MinMax")
+    print("6 - Genereaza întrebari Search")
     mode = input("Mod: ").strip()
 
     if mode == "1":
@@ -138,6 +141,25 @@ def main():
                 print("Structura arborelui:", result["structure"])
             print("Intrebare:", result["question"])
             print(result["answer"])
+    elif mode == "6":
+        num_questions = int(input("Cate întrebari Search vrei sa generezi? "))
+
+        search_question = SearchQuestion()
+        search_checker = SearchAnswerChecker()
+
+        for i in range(num_questions):
+            print(f"\nIntrebarea Search {i + 1}:")
+            question_text, question_id, answer, explanation = search_question.generate()
+
+            print(question_text)
+
+            user_answer = input("\nRaspunsul tau (ex: backtracking, bfs, hillclimbing etc.): ")
+
+            feedback = search_checker.get_feedback(question_id, answer, user_answer, explanation)
+
+            print(feedback["message"])
+            print("Puncte:", feedback["points"])
+            print("Raspuns corect:", feedback["correct_answer"])
     else:
         print("Mod invalid!")
 
