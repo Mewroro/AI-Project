@@ -222,7 +222,7 @@
             {
                 "name": "K",
                 "min-val": 2,
-                "max-val": 5
+                "max-val": 6
             }
         ],
         "explanation": "Graph Coloring este o problema CSP in care trebuie atribuite culori varfurilor astfel incat vecinii sa nu aiba aceeasi culoare. Cele mai eficiente strategii sunt 'backtracking' sau 'hillclimbing'."
@@ -236,7 +236,7 @@
             {
                 "name": "N",
                 "min-val": 5,
-                "max-val": 8
+                "max-val": 6
             }
         ],
         "explanation": "Knight's Tour este o problema de gasire a unui drum Hamiltonian pe tabla de sah. Cele mai eficiente strategii sunt 'backtracking' sau 'heuristic/greedy'."

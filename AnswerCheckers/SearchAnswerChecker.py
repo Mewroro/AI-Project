@@ -1,10 +1,10 @@
 ﻿class SearchAnswerChecker:
     def __init__(self):
         self.valid_strategies = {
-            1: ["backtracking", "hillclimbing"],
+            1: ["backtracking", "hillclimbing", "simulated annealing"],
             2: ["bfs", "a*"],
             3: ["backtracking", "hillclimbing"],
-            4: ["backtracking", "heuristic"],
+            4: ["simulated annealing"],
         }
 
     def get_feedback(self, question_id, answer, user_answer, explanation=""):

@@ -89,16 +89,32 @@ class SearchStrategies:
     def greedy_best_first(self, problem):
         start = problem.initial_state()
         frontier = []
-        heapq.heappush(frontier, (problem.heuristic(start), start))
-        visited = set()
+        counter = 0
+
+        heapq.heappush(frontier, (problem.heuristic(start), counter, start))
+
+        use_visited = not (hasattr(problem, "type") and problem.type == "coloring")
+        visited = set() if use_visited else None
+
         while frontier:
-            _, state = heapq.heappop(frontier)
+            _, _, state = heapq.heappop(frontier)
+
             if problem.is_goal(state):
                 return state
-            visited.add(state)
+
+            if use_visited:
+                visited.add(state)
+
             for next_state in problem.successors(state):
-                if next_state not in visited:
-                    heapq.heappush(frontier, (problem.heuristic(next_state), next_state))
+                if use_visited and next_state in visited:
+                    continue
+
+                counter += 1
+                heapq.heappush(
+                    frontier,
+                    (problem.heuristic(next_state), counter, next_state)
+                )
+
         return None
 
     def simulated_annealing(self, problem, T=1000, alpha=0.95):
@@ -189,35 +205,49 @@ class SearchStrategies:
         self.solutions.clear()
         strategies = []
 
-        if hasattr(problem, "type"):
-            if problem.type in ["nqueens", "coloring"]:
-                strategies = [
-                    ("Backtracking", self.backtracking),
-                    ("HillClimbing", self.hill_climbing),
-                ]
-            elif problem.type == "hanoi":
-                strategies = [
-                    ("BFS", self.bfs),
-                    ("A*", self.astar),
-                ]
-            elif problem.type == "knight":
-                strategies = [
-                    ("Backtracking", self.backtracking),
-                    ("Greedy", self.greedy_best_first),
-                    ("Heuristic", self.greedy_best_first),
-                ]
+        if not hasattr(problem, "type"):
+            return
+
+        if problem.type == "nqueens":
+            strategies = [
+                ("Backtracking", self.backtracking),
+                ("HillClimbing", self.hill_climbing),
+                ("SimulatedAnnealing", self.simulated_annealing),
+            ]
+
+        elif problem.type == "coloring":
+            strategies = [
+                ("Backtracking", self.backtracking),
+                ("HillClimbing", self.hill_climbing),
+                ("Greedy", self.greedy_best_first),
+            ]
+
+        elif problem.type == "hanoi":
+            strategies = [
+                ("BFS", self.bfs),
+                ("A*", self.astar),
+            ]
+
+        elif problem.type == "knight":
+            strategies = [
+                ("SimulatedAnnealing", self.simulated_annealing),
+            ]
+
+        if not strategies:
+            return
 
         for name, func in strategies:
-            self.run(name, func, problem, timeout=5.0)
+            self.run(name, func, problem, timeout=2.0)
 
     def best_strategy(self):
         valid_times = {k: v for k, v in self.times.items() if v != float('inf')}
         if not valid_times:
             return None, None
+
         name = min(valid_times, key=valid_times.get)
         return name, valid_times[name]
 
     def print_results(self):
             for name, t in self.times.items():
                 print(f"{name}: {t:.6f} sec")
-            print(f"\n Cea mai rapidă strategie: {self.best_strategy()}")
+            print(f"\n Cea mai rapida strategie: {self.best_strategy()}")

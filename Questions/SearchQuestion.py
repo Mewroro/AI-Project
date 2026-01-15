@@ -27,16 +27,21 @@ class SearchQuestion(QuestionBase):
         return problem, graph_str
 
     def generate_random_graph(self, V, E):
+        max_edges = V * (V - 1) // 2
+        E = min(E, max_edges)
+
         edges = set()
         while len(edges) < E:
             u = random.randint(0, V - 1)
             v = random.randint(0, V - 1)
             if u != v:
                 edges.add((min(u, v), max(u, v)))
+
         graph = {i: [] for i in range(V)}
         for u, v in edges:
             graph[u].append(v)
             graph[v].append(u)
+
         return graph
 
     def graph_to_string(self, graph):
