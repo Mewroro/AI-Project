@@ -235,7 +235,7 @@ class SearchStrategies:
             strategies = [
                 ("Backtracking", self.backtracking),
                 ("HillClimbing", self.hill_climbing),
-                ("SimulatedAnnealing", self.simulated_annealing),
+                ("Simulated Annealing", self.simulated_annealing),
             ]
 
         elif problem.type == "coloring":

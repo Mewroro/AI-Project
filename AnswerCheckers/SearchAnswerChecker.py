@@ -8,7 +8,7 @@
         user_norm = str(user_answer).strip().lower()
         answer_str = f"{answer[0].lower()}"
 
-        if user_norm in answer_str:
+        if user_norm == answer_str:
             points = 100
             message = "Raspuns corect!"
         else:
