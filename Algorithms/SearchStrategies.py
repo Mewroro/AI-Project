@@ -180,6 +180,29 @@ class SearchStrategies:
 
             current = next_state
 
+    def knight_mrv(self, problem):
+        path = list(problem.initial_state())
+        n = problem.n
+
+        def remaining_moves(state, move):
+            x, y = move
+            cnt = 0
+            for dx, dy in problem.moves:
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < n and 0 <= ny < n and (nx, ny) not in state:
+                    cnt += 1
+            return cnt
+
+        while len(path) < n * n:
+            x, y = path[-1]
+            moves = [(x + dx, y + dy) for dx, dy in problem.moves
+                     if 0 <= x + dx < n and 0 <= y + dy < n and (x + dx, y + dy) not in path]
+            if not moves:
+                return None
+
+            path.append(min(moves, key=lambda m: remaining_moves(path, m)))
+        return tuple(path)
+
     def run_with_timeout(self, func, problem, timeout=5.0):
         with concurrent.futures.ThreadPoolExecutor() as executor:
             future = executor.submit(func, problem)
@@ -230,7 +253,8 @@ class SearchStrategies:
 
         elif problem.type == "knight":
             strategies = [
-                ("SimulatedAnnealing", self.simulated_annealing),
+                ("Simulated Annealing", self.simulated_annealing),
+                ("MRV", self.knight_mrv),
             ]
 
         if not strategies:

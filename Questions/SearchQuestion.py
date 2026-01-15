@@ -82,4 +82,4 @@ class SearchQuestion(QuestionBase):
         self.strategy_runner.run_all(problem)
         answer = self.strategy_runner.best_strategy() #de tip ("nume strategie", timp)
 
-        return question_text, question_id, answer, explanation
+        return question_text, answer, explanation

@@ -149,13 +149,13 @@ def main():
 
         for i in range(num_questions):
             print(f"\nIntrebarea Search {i + 1}:")
-            question_text, question_id, answer, explanation = search_question.generate()
+            question_text, answer, explanation = search_question.generate()
 
             print(question_text)
 
-            user_answer = input("\nRaspunsul tau (ex: backtracking, bfs, hillclimbing etc.): ")
+            user_answer = input("\nRaspunsul tau: ")
 
-            feedback = search_checker.get_feedback(question_id, answer, user_answer, explanation)
+            feedback = search_checker.get_feedback(answer, user_answer, explanation)
 
             print(feedback["message"])
             print("Puncte:", feedback["points"])
