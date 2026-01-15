@@ -4,7 +4,7 @@ import random
 class QuestionBase:
     def __init__(self, category: str):
         self.category = category
-        with open("Templates.json", "r") as file:
+        with open("Templates.json", "r", encoding="utf-8") as file:
             self.templates = [template for template in json.load(file) if template["category"] == category]
 
     def get_random_template(self):
