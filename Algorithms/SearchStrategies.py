@@ -9,19 +9,6 @@ class SearchStrategies:
         self.times = {}
         self.solutions = {}
 
-    def backtracking(self, problem, state=None):
-        if state is None:
-            state = problem.initial_state()
-
-        if problem.is_goal(state):
-            return state
-
-        for next_state in problem.successors(state):
-            result = self.backtracking(problem, next_state)
-            if result is not None:
-                return result
-        return None
-
     def bfs(self, problem):
         frontier = deque([problem.initial_state()])
         visited = set()
@@ -38,18 +25,18 @@ class SearchStrategies:
                 if next_state not in visited:
                     frontier.append(next_state)
         return None
+    
+    def backtracking(self, problem, state=None):
+        if state is None:
+            state = problem.initial_state()
 
-    def dfs(self, problem):
-        frontier = [problem.initial_state()]
-        visited = set()
-        while frontier:
-            state = frontier.pop()
-            if problem.is_goal(state):
-                return state
-            visited.add(state)
-            for next_state in problem.successors(state):
-                if next_state not in visited:
-                    frontier.append(next_state)
+        if problem.is_goal(state):
+            return state
+
+        for next_state in problem.successors(state):
+            result = self.backtracking(problem, next_state)
+            if result is not None:
+                return result
         return None
 
     def iterative_deepening(self, problem, max_depth=50):
@@ -144,27 +131,6 @@ class SearchStrategies:
                     return state
         return beam[0] if beam else None
 
-    def astar(self, problem):
-        start = problem.initial_state()
-        frontier = []
-        heapq.heappush(frontier, (0, start))
-        cost_so_far = {start: 0}
-
-        while frontier:
-            _, state = heapq.heappop(frontier)
-
-            if problem.is_goal(state):
-                return state
-
-            for next_state in problem.successors(state):
-                new_cost = cost_so_far[state] + problem.cost(state, next_state)
-
-                if next_state not in cost_so_far or new_cost < cost_so_far[next_state]:
-                    cost_so_far[next_state] = new_cost
-                    priority = new_cost + problem.heuristic(next_state)
-                    heapq.heappush(frontier, (priority, next_state))
-        return None
-
     def hill_climbing(self, problem):
         current = problem.initial_state()
 
@@ -202,6 +168,27 @@ class SearchStrategies:
 
             path.append(min(moves, key=lambda m: remaining_moves(path, m)))
         return tuple(path)
+    
+    def astar(self, problem):
+        start = problem.initial_state()
+        frontier = []
+        heapq.heappush(frontier, (0, start))
+        cost_so_far = {start: 0}
+
+        while frontier:
+            _, state = heapq.heappop(frontier)
+
+            if problem.is_goal(state):
+                return state
+
+            for next_state in problem.successors(state):
+                new_cost = cost_so_far[state] + problem.cost(state, next_state)
+
+                if next_state not in cost_so_far or new_cost < cost_so_far[next_state]:
+                    cost_so_far[next_state] = new_cost
+                    priority = new_cost + problem.heuristic(next_state)
+                    heapq.heappush(frontier, (priority, next_state))
+        return None
 
     def run_with_timeout(self, func, problem, timeout=5.0):
         with concurrent.futures.ThreadPoolExecutor() as executor:
