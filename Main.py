@@ -153,7 +153,7 @@ def main():
 
             print(question_text)
 
-            user_answer = input("\nRaspunsul tau:6 ")
+            user_answer = input("\nRaspunsul tau:")
 
             feedback = search_checker.get_feedback(answer, user_answer, explanation)
 
